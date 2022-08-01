@@ -18,13 +18,21 @@ def video_to_gif(link):
     if os.path.exists(gif_file_path):
         return f'{os.path.dirname(os.path.abspath(__file__))}/{gif_file_path}'
 
+    if not os.path.exists('./videos'):
+        os.mkdir('videos')
+    if not os.path.exists('./gifs'):
+        os.mkdir('gifs')
+
     # Download video
     request.urlretrieve(link, video_file_path)
 
     # Transform mp4 video to gif
     video_clip = VideoFileClip(video_file_path)
-    video_clip.write_gif(gif_file_path)
-    video_clip.close()
+    try:
+        video_clip.write_gif(gif_file_path)
+        video_clip.close()
+    except:
+        video_clip.close()
 
     # Remove video file after transformation
     os.remove(video_file_path)
