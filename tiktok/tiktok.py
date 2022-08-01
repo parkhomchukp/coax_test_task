@@ -8,21 +8,25 @@ video_link = 'https://v16m-webapp.tiktokcdn-us.com/ed129ecb01ab00e202682e99f68a9
 
 
 def video_to_gif(link):
+    # Generating unique name for files
     hash_object = hashlib.md5(link.encode())
     hash_md5 = hash_object.hexdigest()
-
     video_file_path = f'videos/tiktok_video_{hash_md5}.mp4'
     gif_file_path = f'gifs/tiktok_gif_{hash_md5}.gif'
 
+    # Return path if gif already exists
     if os.path.exists(gif_file_path):
         return f'{os.path.dirname(os.path.abspath(__file__))}/{gif_file_path}'
 
+    # Download video
     request.urlretrieve(link, video_file_path)
 
+    # Transform mp4 video to gif
     video_clip = VideoFileClip(video_file_path)
     video_clip.write_gif(gif_file_path)
     video_clip.close()
 
+    # Remove video file after transformation
     os.remove(video_file_path)
 
     return f'{os.path.dirname(os.path.abspath(__file__))}/{gif_file_path}'
